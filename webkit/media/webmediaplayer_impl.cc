@@ -8,6 +8,8 @@
 #include <limits>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "base/bind.h"
 #include "base/callback.h"
@@ -58,6 +60,7 @@ using WebKit::WebRect;
 using WebKit::WebSize;
 using WebKit::WebString;
 using media::PipelineStatus;
+using namespace std;
 
 namespace {
 
@@ -147,6 +150,12 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       pending_repaint_(false),
       pending_size_change_(false),
       video_frame_provider_client_(NULL) {
+      
+      gettimeofday(&t1, NULL);
+
+      double elapsedTime=printTimeStamp();
+      cout<<"Loading at "<<elapsedTime<<"\n";
+
   media_log_->AddEvent(
       media_log_->CreateEvent(media::MediaLogEvent::WEBMEDIAPLAYER_CREATED));
 
@@ -287,6 +296,11 @@ void WebMediaPlayerImpl::cancelLoad() {
 }
 
 void WebMediaPlayerImpl::play() {
+  
+  
+  double elapsedTime=printTimeStamp();
+  cout<<"Play at "<<elapsedTime<<"\n";
+  
   DCHECK(main_loop_->BelongsToCurrentThread());
 
   paused_ = false;
@@ -299,6 +313,10 @@ void WebMediaPlayerImpl::play() {
 }
 
 void WebMediaPlayerImpl::pause() {
+  
+  double elapsedTime=printTimeStamp();
+  cout<<"Pause at "<<elapsedTime<<"\n";
+  
   DCHECK(main_loop_->BelongsToCurrentThread());
 
   paused_ = true;
@@ -322,6 +340,10 @@ bool WebMediaPlayerImpl::supportsSave() const {
 }
 
 void WebMediaPlayerImpl::seek(double seconds) {
+  
+  double elapsedTime=printTimeStamp();
+  cout<<"Seek at "<<elapsedTime<<"\n";
+  
   DCHECK(main_loop_->BelongsToCurrentThread());
 
   if (starting_ || seeking_) {
@@ -1256,6 +1278,10 @@ void WebMediaPlayerImpl::OnDurationChange() {
 
 void WebMediaPlayerImpl::FrameReady(
     const scoped_refptr<media::VideoFrame>& frame) {
+  
+  double elapsedTime=printTimeStamp();
+  cout<<"Displayed frame at "<<elapsedTime<<"\n";
+
   base::AutoLock auto_lock(lock_);
 
   if (current_frame_ &&
@@ -1272,6 +1298,17 @@ void WebMediaPlayerImpl::FrameReady(
   pending_repaint_ = true;
   main_loop_->PostTask(FROM_HERE, base::Bind(
       &WebMediaPlayerImpl::Repaint, AsWeakPtr()));
+}
+
+//***************************************************************** EXTRA UTILITY FUNCTIONS *************************************************
+
+double WebMediaPlayerImpl::printTimeStamp(){
+ timeval t2;
+ gettimeofday(&t2, NULL);
+ double elapsedTime;
+ elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+ elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+ return elapsedTime;
 }
 
 }  // namespace webkit_media
