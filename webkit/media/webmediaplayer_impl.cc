@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sys/time.h>
 #include <fstream>
 
 #include "base/bind.h"
@@ -60,6 +61,7 @@ using WebKit::WebRect;
 using WebKit::WebSize;
 using WebKit::WebString;
 using media::PipelineStatus;
+
 using namespace std;
 
 namespace {
@@ -150,11 +152,11 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       pending_repaint_(false),
       pending_size_change_(false),
       video_frame_provider_client_(NULL) {
-      
-      gettimeofday(&t1, NULL);
 
-      double elapsedTime=printTimeStamp();
-      cout<<"Loading at "<<elapsedTime<<"\n";
+	  srand(clock());
+      //gettimeofday(&t1, NULL);
+
+      log("Loading");
 
   media_log_->AddEvent(
       media_log_->CreateEvent(media::MediaLogEvent::WEBMEDIAPLAYER_CREATED));
@@ -272,6 +274,7 @@ void WebMediaPlayerImpl::load(const WebKit::WebURL& url,
 
   // Media source pipelines can start immediately.
   supports_save_ = false;
+  //cout<<"In load\n";
   StartPipeline(media_source);
 }
 
@@ -297,9 +300,7 @@ void WebMediaPlayerImpl::cancelLoad() {
 
 void WebMediaPlayerImpl::play() {
   
-  
-  double elapsedTime=printTimeStamp();
-  cout<<"Play at "<<elapsedTime<<"\n";
+  log("Play");
   
   DCHECK(main_loop_->BelongsToCurrentThread());
 
@@ -314,8 +315,7 @@ void WebMediaPlayerImpl::play() {
 
 void WebMediaPlayerImpl::pause() {
   
-  double elapsedTime=printTimeStamp();
-  cout<<"Pause at "<<elapsedTime<<"\n";
+  log("Pause");
   
   DCHECK(main_loop_->BelongsToCurrentThread());
 
@@ -341,8 +341,7 @@ bool WebMediaPlayerImpl::supportsSave() const {
 
 void WebMediaPlayerImpl::seek(double seconds) {
   
-  double elapsedTime=printTimeStamp();
-  cout<<"Seek at "<<elapsedTime<<"\n";
+  log("Seek");
   
   DCHECK(main_loop_->BelongsToCurrentThread());
 
@@ -541,9 +540,11 @@ void WebMediaPlayerImpl::setSize(const WebSize& size) {
 void WebMediaPlayerImpl::paint(WebCanvas* canvas,
                                const WebRect& rect,
                                uint8_t alpha) {
+  //cout<<"Paint\n";
   DCHECK(main_loop_->BelongsToCurrentThread());
 
   if (!accelerated_compositing_reported_) {
+
     accelerated_compositing_reported_ = true;
     // Normally paint() is only called in non-accelerated rendering, but there
     // are exceptions such as webgl where compositing is used in the WebView but
@@ -848,6 +849,7 @@ void WebMediaPlayerImpl::WillDestroyCurrentMessageLoop() {
 }
 
 void WebMediaPlayerImpl::Repaint() {
+  //cout<<"Repaint\n";
   DCHECK(main_loop_->BelongsToCurrentThread());
 
   bool size_changed = false;
@@ -868,7 +870,7 @@ void WebMediaPlayerImpl::OnPipelineSeek(PipelineStatus status) {
   starting_ = false;
   seeking_ = false;
   if (pending_seek_) {
-    pending_seek_ = false;
+    pending_seek_ = false; 
     seek(pending_seek_seconds_);
     return;
   }
@@ -1071,6 +1073,7 @@ void WebMediaPlayerImpl::DataSourceInitialized(const GURL& gurl, bool success) {
     return;
   }
 
+  //cout<<"In DataSourceInitialized\n";
   StartPipeline(NULL);
 }
 
@@ -1086,6 +1089,7 @@ void WebMediaPlayerImpl::NotifyDownloading(bool is_downloading) {
 }
 
 void WebMediaPlayerImpl::StartPipeline(WebKit::WebMediaSource* media_source) {
+	//cout<<"In StartPipeline\n";
   const CommandLine* cmd_line = CommandLine::ForCurrentProcess();
 
 
@@ -1170,6 +1174,7 @@ void WebMediaPlayerImpl::StartPipeline(WebKit::WebMediaSource* media_source) {
           base::Bind(&WebMediaPlayerImpl::FrameReady, base::Unretained(this)),
           BIND_TO_RENDER_LOOP(&WebMediaPlayerImpl::SetOpaque),
           true));
+
   filter_collection->SetVideoRenderer(video_renderer.Pass());
 
   // ... and we're ready to go!
@@ -1208,7 +1213,7 @@ void WebMediaPlayerImpl::SetReadyState(WebMediaPlayer::ReadyState state) {
 void WebMediaPlayerImpl::Destroy() {
   DCHECK(main_loop_->BelongsToCurrentThread());
 
-  // Abort any pending IO so stopping the pipeline doesn't get blocked.
+  // Abort any pending IO so stopping the pipeline doesnt get blocked.
   if (data_source_)
     data_source_->Abort();
   if (chunk_demuxer_) {
@@ -1276,11 +1281,12 @@ void WebMediaPlayerImpl::OnDurationChange() {
   GetClient()->durationChanged();
 }
 
+int frame_count=0;
+
 void WebMediaPlayerImpl::FrameReady(
     const scoped_refptr<media::VideoFrame>& frame) {
-  
-  double elapsedTime=printTimeStamp();
-  cout<<"Displayed frame at "<<elapsedTime<<"\n";
+
+    log("FrameReady");
 
   base::AutoLock auto_lock(lock_);
 
@@ -1298,17 +1304,33 @@ void WebMediaPlayerImpl::FrameReady(
   pending_repaint_ = true;
   main_loop_->PostTask(FROM_HERE, base::Bind(
       &WebMediaPlayerImpl::Repaint, AsWeakPtr()));
+
+  //Seek to a random location or pause every 100 frames
+  	frame_count++;
+      if((frame_count%100)==0){
+      	int choice=rand()%2;
+      	if(choice==0){
+      		log("Starting Random Seek");
+      		int max_seek=(int) maxTimeSeekable();
+      		seek(rand()%max_seek);
+      	}
+      	else{
+      		//pause();
+      	}
+      }
 }
 
 //***************************************************************** EXTRA UTILITY FUNCTIONS *************************************************
 
-double WebMediaPlayerImpl::printTimeStamp(){
- timeval t2;
- gettimeofday(&t2, NULL);
- double elapsedTime;
- elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
- elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
- return elapsedTime;
+void WebMediaPlayerImpl::log(string message){
+	//cout<<"Log called";
+	timeval t1;
+	gettimeofday(&t1, NULL);
+	ofstream out;
+	out.open("/home/devasia/Desktop/chromium_log.txt", ofstream::app);
+	cout<<message<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
+	out.flush();
+	out.close();
 }
 
 }  // namespace webkit_media

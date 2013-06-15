@@ -24,6 +24,9 @@
 #include "media/base/simd/convert_rgb_to_yuv.h"
 #include "media/base/simd/convert_yuv_to_rgb.h"
 #include "media/base/simd/filter_yuv.h"
+#include <iostream>
+
+using namespace std;
 
 #if defined(ARCH_CPU_X86_FAMILY)
 #if defined(COMPILER_MSVC)
@@ -97,6 +100,7 @@ static ScaleYUVToRGB32RowProc ChooseLinearScaleYUVToRGB32RowProc() {
 
 // Empty SIMD registers state after using them.
 void EmptyRegisterState() {
+	//cout<<"EmptyRegisterState\n";
 #if defined(ARCH_CPU_X86_FAMILY)
   static bool checked = false;
   static bool has_mmx = false;
@@ -137,6 +141,8 @@ void ScaleYUVToRGB32(const uint8* y_buf,
                      YUVType yuv_type,
                      Rotate view_rotate,
                      ScaleFilter filter) {
+
+  //cout<<"ScaleYUVtoRGB32\n";
   static FilterYUVRowsProc filter_proc = NULL;
   static ConvertYUVToRGB32RowProc convert_proc = NULL;
   static ScaleYUVToRGB32RowProc scale_proc = NULL;

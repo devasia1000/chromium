@@ -9,6 +9,9 @@
 #include "media/base/yuv_convert.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "third_party/skia/include/core/SkDevice.h"
+#include <iostream>
+
+using namespace std;
 
 namespace media {
 
@@ -70,10 +73,18 @@ static bool CanFastPaint(SkCanvas* canvas, uint8_t alpha,
 // Fast paint does YUV => RGB, scaling, blitting all in one step into the
 // canvas. It's not always safe and appropriate to perform fast paint.
 // CanFastPaint() is used to determine the conditions.
+//double called=0;
+
 static void FastPaint(
     const scoped_refptr<media::VideoFrame>& video_frame,
     SkCanvas* canvas,
     const SkRect& dest_rect) {
+	//timeval t2;
+	//gettimeofday(&t2, NULL);
+	//cout<<"FastPaint at "<<t2.tv_sec<<"."<<t2.tv_usec<<"\n";
+	//cout<<"FastPaint called "<<called;
+	//called++;
+
   DCHECK(IsEitherYV12OrYV16(video_frame->format())) << video_frame->format();
   DCHECK_EQ(video_frame->stride(media::VideoFrame::kUPlane),
             video_frame->stride(media::VideoFrame::kVPlane));
@@ -285,6 +296,8 @@ void SkCanvasVideoRenderer::Paint(media::VideoFrame* video_frame,
                                   SkCanvas* canvas,
                                   const gfx::RectF& dest_rect,
                                   uint8_t alpha) {
+
+ //cout<<"SKCanvasVideoRenderer\n";
   if (alpha == 0) {
     return;
   }
@@ -300,6 +313,7 @@ void SkCanvasVideoRenderer::Paint(media::VideoFrame* video_frame,
   if (!video_frame ||
       !IsEitherYV12OrYV12AOrYV16OrNative(video_frame->format())) {
     canvas->drawRect(dest, paint);
+    //cout<<"Painting black rectangle\n";
     return;
   }
 
@@ -319,6 +333,7 @@ void SkCanvasVideoRenderer::Paint(media::VideoFrame* video_frame,
   // Do a slower paint using |last_frame_|.
   paint.setFilterBitmap(true);
   canvas->drawBitmapRect(last_frame_, NULL, dest, &paint);
+  //cout<<"Drawing Paint Rectangle\n";
 }
 
 }  // namespace media

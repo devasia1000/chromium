@@ -20,7 +20,9 @@
 #ifndef WEBKIT_MEDIA_WEBMEDIAPLAYER_IMPL_H_
 #define WEBKIT_MEDIA_WEBMEDIAPLAYER_IMPL_H_
 
-#include <string>
+#include <string.h>
+
+using namespace std;
 
 #include "base/memory/ref_counted.h"
 #include "base/memory/scoped_ptr.h"
@@ -78,6 +80,10 @@ class WebMediaPlayerImpl
   // Constructs a WebMediaPlayer implementation using Chromium's media stack.
   //
   // |delegate| may be null.
+
+  static string printTimeStamp();
+  static void log(string message);
+  
   WebMediaPlayerImpl(
       WebKit::WebFrame* frame,
       WebKit::WebMediaPlayerClient* client,
@@ -213,6 +219,7 @@ class WebMediaPlayerImpl
   void SetOpaque(bool);
 
  private:
+ 
   // Contains common logic used across the different types loading.
   void LoadSetup(const WebKit::WebURL& url);
 
@@ -265,6 +272,7 @@ class WebMediaPlayerImpl
 
   // Called by VideoRendererBase on its internal thread with the new frame to be
   // painted.
+  
   void FrameReady(const scoped_refptr<media::VideoFrame>& frame);
 
   WebKit::WebFrame* frame_;
@@ -371,6 +379,9 @@ class WebMediaPlayerImpl
   cc::VideoFrameProvider::Client* video_frame_provider_client_;
 
   DISALLOW_COPY_AND_ASSIGN(WebMediaPlayerImpl);
+
+  //Initial reference timestamp
+  timeval t1; 
 };
 
 }  // namespace webkit_media
