@@ -153,6 +153,7 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       pending_size_change_(false),
       video_frame_provider_client_(NULL) {
 
+	  log("#Loading");
 	  srand(clock());
       //gettimeofday(&t1, NULL);
 
@@ -300,7 +301,7 @@ void WebMediaPlayerImpl::cancelLoad() {
 
 void WebMediaPlayerImpl::play() {
   
-  log("Play");
+  //log("Play");
   
   DCHECK(main_loop_->BelongsToCurrentThread());
 
@@ -315,7 +316,7 @@ void WebMediaPlayerImpl::play() {
 
 void WebMediaPlayerImpl::pause() {
   
-  log("Pause");
+  //log("Pause");
   
   DCHECK(main_loop_->BelongsToCurrentThread());
 
@@ -341,7 +342,7 @@ bool WebMediaPlayerImpl::supportsSave() const {
 
 void WebMediaPlayerImpl::seek(double seconds) {
   
-  log("Seek");
+  //log("Seek");
   
   DCHECK(main_loop_->BelongsToCurrentThread());
 
@@ -1286,8 +1287,7 @@ int frame_count=0;
 void WebMediaPlayerImpl::FrameReady(
     const scoped_refptr<media::VideoFrame>& frame) {
 
-    log("FrameReady");
-
+	//log("#FrameReady");
   base::AutoLock auto_lock(lock_);
 
   if (current_frame_ &&
@@ -1306,7 +1306,7 @@ void WebMediaPlayerImpl::FrameReady(
       &WebMediaPlayerImpl::Repaint, AsWeakPtr()));
 
   //Seek to a random location or pause every 100 frames
-  	frame_count++;
+  	/*frame_count++;
       if((frame_count%100)==0){
       	int choice=rand()%2;
       	if(choice==0){
@@ -1317,7 +1317,7 @@ void WebMediaPlayerImpl::FrameReady(
       	else{
       		//pause();
       	}
-      }
+      }*/
 }
 
 //***************************************************************** EXTRA UTILITY FUNCTIONS *************************************************
@@ -1326,11 +1326,11 @@ void WebMediaPlayerImpl::log(string message){
 	//cout<<"Log called";
 	timeval t1;
 	gettimeofday(&t1, NULL);
-	ofstream out;
-	out.open("/home/devasia/Desktop/chromium_log.txt", ofstream::app);
+	//ofstream out;
+	//out.open("/home/devasia/Desktop/chromium_log.txt", ofstream::app);
 	cout<<message<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
-	out.flush();
-	out.close();
+	//out.flush();
+	//out.close();
 }
 
 }  // namespace webkit_media

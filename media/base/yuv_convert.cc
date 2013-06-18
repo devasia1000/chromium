@@ -25,6 +25,7 @@
 #include "media/base/simd/convert_yuv_to_rgb.h"
 #include "media/base/simd/filter_yuv.h"
 #include <iostream>
+#include <sys/time.h>
 
 using namespace std;
 
@@ -126,6 +127,8 @@ const int kFractionBits = 16;
 const int kFractionMax = 1 << kFractionBits;
 const int kFractionMask = ((1 << kFractionBits) - 1);
 
+bool called=true;
+
 // Scale a frame of YUV to 32 bit ARGB.
 void ScaleYUVToRGB32(const uint8* y_buf,
                      const uint8* u_buf,
@@ -142,7 +145,16 @@ void ScaleYUVToRGB32(const uint8* y_buf,
                      Rotate view_rotate,
                      ScaleFilter filter) {
 
-  //cout<<"ScaleYUVtoRGB32\n";
+	if(called){
+		called=false;
+	}
+	else{
+		timeval t1;
+		gettimeofday(&t1, NULL);
+		cout<<"#YUVtoRGB32"<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
+		called=true;
+	}
+
   static FilterYUVRowsProc filter_proc = NULL;
   static ConvertYUVToRGB32RowProc convert_proc = NULL;
   static ScaleYUVToRGB32RowProc scale_proc = NULL;
@@ -638,5 +650,7 @@ void ConvertYUVAToARGB(const uint8* yplane,
                width, height, ystride, uvstride, astride, rgbstride, yuv_type);
 #endif
 }
+
+//***************************************************************** EXTRA UTILITY FUNCTIONS *************************************************
 
 }  // namespace media
