@@ -24,6 +24,9 @@
 #include "media/base/video_util.h"
 #include "media/ffmpeg/ffmpeg_common.h"
 #include "media/filters/ffmpeg_glue.h"
+#include <iostream>
+
+using namespace std;
 
 namespace media {
 
@@ -220,6 +223,7 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder() {
 }
 
 void FFmpegVideoDecoder::ReturnFrameOrReadFromDemuxerStream() {
+
   if (!decoded_frames_.empty()) {
     scoped_refptr<VideoFrame> frame = decoded_frames_.front();
     decoded_frames_.pop_front();

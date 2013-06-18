@@ -75,15 +75,23 @@ static bool CanFastPaint(SkCanvas* canvas, uint8_t alpha,
 // CanFastPaint() is used to determine the conditions.
 //double called=0;
 
+//bool called =true;
+
 static void FastPaint(
     const scoped_refptr<media::VideoFrame>& video_frame,
     SkCanvas* canvas,
     const SkRect& dest_rect) {
-	//timeval t2;
-	//gettimeofday(&t2, NULL);
-	//cout<<"FastPaint at "<<t2.tv_sec<<"."<<t2.tv_usec<<"\n";
-	//cout<<"FastPaint called "<<called;
-	//called++;
+
+	/*if(called){
+		called=false;
+	}
+
+	else{
+		timeval t1;
+		gettimeofday(&t1, NULL);
+		cout<<"#YUVtoRGB32"<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
+		called=true;
+	}*/
 
   DCHECK(IsEitherYV12OrYV16(video_frame->format())) << video_frame->format();
   DCHECK_EQ(video_frame->stride(media::VideoFrame::kUPlane),

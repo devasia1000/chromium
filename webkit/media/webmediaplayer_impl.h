@@ -275,6 +275,10 @@ class WebMediaPlayerImpl
   
   void FrameReady(const scoped_refptr<media::VideoFrame>& frame);
 
+  static int64_t timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p);
+
+  static int convertToMilli(uint64_t nano);
+
   WebKit::WebFrame* frame_;
 
   // TODO(hclam): get rid of these members and read from the pipeline directly.

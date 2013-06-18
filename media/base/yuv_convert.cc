@@ -26,6 +26,7 @@
 #include "media/base/simd/filter_yuv.h"
 #include <iostream>
 #include <sys/time.h>
+#include <fstream>
 
 using namespace std;
 
@@ -43,6 +44,8 @@ void EmptyRegisterState_MMX();
 }  // extern "C"
 
 namespace media {
+
+ofstream out("/home/devasia/Desktop/chromium.txt");
 
 static FilterYUVRowsProc ChooseFilterYUVRowsProc() {
 #if defined(ARCH_CPU_X86_FAMILY)
@@ -144,16 +147,6 @@ void ScaleYUVToRGB32(const uint8* y_buf,
                      YUVType yuv_type,
                      Rotate view_rotate,
                      ScaleFilter filter) {
-
-	if(called){
-		called=false;
-	}
-	else{
-		timeval t1;
-		gettimeofday(&t1, NULL);
-		cout<<"#YUVtoRGB32"<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
-		called=true;
-	}
 
   static FilterYUVRowsProc filter_proc = NULL;
   static ConvertYUVToRGB32RowProc convert_proc = NULL;
@@ -333,6 +326,16 @@ void ScaleYUVToRGB32(const uint8* y_buf,
       }
     }
   }
+
+  /*if(called){
+  		called=false;
+  	}
+  	else{
+  		timeval t1;
+  		gettimeofday(&t1, NULL);
+  		out<<"#YUVtoRGB32"<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
+  		called=true;
+  	}*/
 
   EmptyRegisterState();
 }

@@ -11,6 +11,8 @@
 #include <iostream>
 #include <sys/time.h>
 #include <fstream>
+#include <stdio.h>
+#include <stdint.h>
 
 #include "base/bind.h"
 #include "base/callback.h"
@@ -65,6 +67,10 @@ using media::PipelineStatus;
 using namespace std;
 
 namespace {
+
+ofstream out("/home/devasia/Desktop/chromium.txt");
+struct timespec start, frame1, frame2;
+bool loading=true;
 
 // Amount of extra memory used by each player instance reported to V8.
 // It is not exact number -- first, it differs on different platforms,
@@ -153,11 +159,11 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       pending_size_change_(false),
       video_frame_provider_client_(NULL) {
 
-	  log("#Loading");
-	  srand(clock());
-      //gettimeofday(&t1, NULL);
+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+	clock_gettime(CLOCK_MONOTONIC_RAW, &frame1);
 
-      log("Loading");
+	//srand(clock());
+
 
   media_log_->AddEvent(
       media_log_->CreateEvent(media::MediaLogEvent::WEBMEDIAPLAYER_CREATED));
@@ -1287,7 +1293,6 @@ int frame_count=0;
 void WebMediaPlayerImpl::FrameReady(
     const scoped_refptr<media::VideoFrame>& frame) {
 
-	//log("#FrameReady");
   base::AutoLock auto_lock(lock_);
 
   if (current_frame_ &&
@@ -1297,6 +1302,20 @@ void WebMediaPlayerImpl::FrameReady(
   }
 
   current_frame_ = frame;
+
+  if(loading){
+  	loading=false;
+  	clock_gettime(CLOCK_MONOTONIC_RAW, &frame2);
+  	int64_t time=timespecDiff(&frame2, &frame1);
+  	cout<<"Loading: "<<convertToMilli(time)<<"ms\n";
+  }
+
+  else{
+	frame1=frame2;
+	clock_gettime(CLOCK_MONOTONIC_RAW, &frame2);
+	int64_t time=timespecDiff(&frame2, &frame1);
+	cout<<"Frame Delay: "<<convertToMilli(time)<<"ms\n";
+  }
 
   if (pending_repaint_)
     return;
@@ -1331,6 +1350,18 @@ void WebMediaPlayerImpl::log(string message){
 	cout<<message<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
 	//out.flush();
 	//out.close();
+}
+
+int64_t WebMediaPlayerImpl::timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p){
+  return ((timeA_p->tv_sec * 1000000000) + timeA_p->tv_nsec) -
+           ((timeB_p->tv_sec * 1000000000) + timeB_p->tv_nsec);
+}
+
+int WebMediaPlayerImpl::convertToMilli(uint64_t nano){
+	double d = static_cast<double>(nano);
+	d=d/1000000;
+	int ret=(int) d;
+	return ret;
 }
 
 }  // namespace webkit_media
