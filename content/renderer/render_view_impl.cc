@@ -6,9 +6,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
-
-using namespace std;
 
 #include "base/auto_reset.h"
 #include "base/bind.h"
@@ -2688,8 +2685,6 @@ WebSharedWorker* RenderViewImpl::createSharedWorker(
 
 WebMediaPlayer* RenderViewImpl::createMediaPlayer(
     WebFrame* frame, const WebKit::WebURL& url, WebMediaPlayerClient* client) {
-
-	  cout<<"CreatedPlayer";
 
   FOR_EACH_OBSERVER(
       RenderViewObserver, observers_, WillCreateMediaPlayer(frame, client));
