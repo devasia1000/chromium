@@ -1284,7 +1284,8 @@ void WebMediaPlayerImpl::FrameReady(
   frame_count++;
   Util::log("FrameReady");
 
-  if(fmod(frame_count, Util::returnFramesToRandomSeek())==0){
+
+  if(fmod(frame_count, Util::returnFramesToRandomSeek())==0 && Util::randomSeek()==true){
 	  double seekTime=fmod(rand(), maxTimeSeekable());
 	  seek(seekTime);
   }

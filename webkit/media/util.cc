@@ -12,8 +12,10 @@ using namespace std;
 //TODO: Make these variables private
 struct timespec start, frame;
 bool loading=false;
-//This is user editable
+
+//These variables are user editable
 double numFramesRandomSeek=100;
+bool randomSeek=true;
 
 void Util::init(){
 	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
@@ -28,6 +30,10 @@ void Util::log(string message){
 
 double Util::returnFramesToRandomSeek(){
 	return numFramesRandomSeek;
+}
+
+bool Util::randomSeek(){
+	return randomSeek;
 }
 
 //This is a private function of the class

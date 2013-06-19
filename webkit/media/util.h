@@ -27,6 +27,7 @@ public:
 	static void init();
 	static void log(string message);
 	static double returnFramesToRandomSeek();
+	static bool randomSeek();
 };
 
 #endif /* UTIL_H_ */
