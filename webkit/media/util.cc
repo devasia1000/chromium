@@ -12,6 +12,8 @@ using namespace std;
 //TODO: Make these variables private
 struct timespec start, frame;
 bool loading=false;
+//This is user editable
+double numFramesRandomSeek=100;
 
 void Util::init(){
 	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
@@ -22,6 +24,10 @@ void Util::log(string message){
 	double time=timespecDiff(&frame, &start);
 	//TODO: Write to file instead of 'cout'
 	cout<<"#"<<message<<" at "<<time<<"\n";
+}
+
+double Util::returnFramesToRandomSeek(){
+	return numFramesRandomSeek;
 }
 
 //This is a private function of the class
