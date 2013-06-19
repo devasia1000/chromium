@@ -26,7 +26,6 @@ PrerenderWebMediaPlayer::PrerenderWebMediaPlayer(
       is_prerendering_(true),
       url_loaded_(false),
       cors_mode_(CORSModeUnspecified) {
-	cout<<"PrerenderWebMediaPlayerImpl\n";
 }
 
 PrerenderWebMediaPlayer::~PrerenderWebMediaPlayer() {}

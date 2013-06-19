@@ -20,7 +20,6 @@ void Util::init(){
 void Util::log(string message){
 	clock_gettime(CLOCK_MONOTONIC_RAW, &frame);
 	double time=timespecDiff(&frame, &start);
-
 	//TODO: Write to file instead
 	cout<<"#"<<message<<" at "<<time<<"\n";
 }
