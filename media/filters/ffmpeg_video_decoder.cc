@@ -24,9 +24,6 @@
 #include "media/base/video_util.h"
 #include "media/ffmpeg/ffmpeg_common.h"
 #include "media/filters/ffmpeg_glue.h"
-#include <iostream>
-
-using namespace std;
 
 namespace media {
 

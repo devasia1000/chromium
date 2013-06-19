@@ -80,9 +80,6 @@ class WebMediaPlayerImpl
   // Constructs a WebMediaPlayer implementation using Chromium's media stack.
   //
   // |delegate| may be null.
-
-  static string printTimeStamp();
-  static void log(string message);
   
   WebMediaPlayerImpl(
       WebKit::WebFrame* frame,
@@ -274,10 +271,6 @@ class WebMediaPlayerImpl
   // painted.
   
   void FrameReady(const scoped_refptr<media::VideoFrame>& frame);
-
-  static int64_t timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p);
-
-  static int convertToMilli(uint64_t nano);
 
   WebKit::WebFrame* frame_;
 

@@ -20,7 +20,7 @@ void Util::init(){
 void Util::log(string message){
 	clock_gettime(CLOCK_MONOTONIC_RAW, &frame);
 	double time=timespecDiff(&frame, &start);
-	//TODO: Write to file instead
+	//TODO: Write to file instead of 'cout'
 	cout<<"#"<<message<<" at "<<time<<"\n";
 }
 
@@ -29,6 +29,6 @@ double Util::timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p){
 	int64_t nano = ((timeA_p->tv_sec * 1000000000) + timeA_p->tv_nsec) -
            ((timeB_p->tv_sec * 1000000000) + timeB_p->tv_nsec);
 	double d = static_cast<double>(nano);
-	d=d/1000000; //Convert to seconds
+	d=d/1000000; //Convert to milliseconds
 	return d;
 }

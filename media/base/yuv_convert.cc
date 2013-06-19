@@ -24,11 +24,6 @@
 #include "media/base/simd/convert_rgb_to_yuv.h"
 #include "media/base/simd/convert_yuv_to_rgb.h"
 #include "media/base/simd/filter_yuv.h"
-#include <iostream>
-#include <sys/time.h>
-#include <fstream>
-
-using namespace std;
 
 #if defined(ARCH_CPU_X86_FAMILY)
 #if defined(COMPILER_MSVC)
@@ -44,8 +39,6 @@ void EmptyRegisterState_MMX();
 }  // extern "C"
 
 namespace media {
-
-ofstream out("/home/devasia/Desktop/chromium.txt");
 
 static FilterYUVRowsProc ChooseFilterYUVRowsProc() {
 #if defined(ARCH_CPU_X86_FAMILY)
@@ -104,7 +97,6 @@ static ScaleYUVToRGB32RowProc ChooseLinearScaleYUVToRGB32RowProc() {
 
 // Empty SIMD registers state after using them.
 void EmptyRegisterState() {
-	//cout<<"EmptyRegisterState\n";
 #if defined(ARCH_CPU_X86_FAMILY)
   static bool checked = false;
   static bool has_mmx = false;
@@ -129,8 +121,6 @@ void EmptyRegisterState() {
 const int kFractionBits = 16;
 const int kFractionMax = 1 << kFractionBits;
 const int kFractionMask = ((1 << kFractionBits) - 1);
-
-bool called=true;
 
 // Scale a frame of YUV to 32 bit ARGB.
 void ScaleYUVToRGB32(const uint8* y_buf,
@@ -326,16 +316,6 @@ void ScaleYUVToRGB32(const uint8* y_buf,
       }
     }
   }
-
-  /*if(called){
-  		called=false;
-  	}
-  	else{
-  		timeval t1;
-  		gettimeofday(&t1, NULL);
-  		out<<"#YUVtoRGB32"<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
-  		called=true;
-  	}*/
 
   EmptyRegisterState();
 }
@@ -653,7 +633,5 @@ void ConvertYUVAToARGB(const uint8* yplane,
                width, height, ystride, uvstride, astride, rgbstride, yuv_type);
 #endif
 }
-
-//***************************************************************** EXTRA UTILITY FUNCTIONS *************************************************
 
 }  // namespace media
