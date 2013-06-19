@@ -56,6 +56,7 @@
 #include "webkit/media/webmediasourceclient_impl.h"
 #include "webkit/plugins/ppapi/ppapi_webplugin_impl.h"
 #include "webkit/renderer/compositor_bindings/web_layer_impl.h"
+#include "util.h"
 
 using WebKit::WebCanvas;
 using WebKit::WebMediaPlayer;
@@ -68,9 +69,11 @@ using namespace std;
 
 namespace {
 
-ofstream out("/home/devasia/Desktop/chromium.txt");
-struct timespec start, frame1, frame2;
-bool loading=true;
+//ofstream out("/home/devasia/Desktop/chromium.txt");
+//struct timespec frame1, frame2;
+//bool loading=true;
+//double frame_count=0;
+//int stall_delay=60;
 
 // Amount of extra memory used by each player instance reported to V8.
 // It is not exact number -- first, it differs on different platforms,
@@ -159,8 +162,7 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       pending_size_change_(false),
       video_frame_provider_client_(NULL) {
 
-	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-	clock_gettime(CLOCK_MONOTONIC_RAW, &frame1);
+	Util::init();
 
 	//srand(clock());
 
@@ -348,7 +350,7 @@ bool WebMediaPlayerImpl::supportsSave() const {
 
 void WebMediaPlayerImpl::seek(double seconds) {
   
-  //log("Seek");
+  Util::log("Seek");
   
   DCHECK(main_loop_->BelongsToCurrentThread());
 
@@ -1288,10 +1290,10 @@ void WebMediaPlayerImpl::OnDurationChange() {
   GetClient()->durationChanged();
 }
 
-int frame_count=0;
-
 void WebMediaPlayerImpl::FrameReady(
     const scoped_refptr<media::VideoFrame>& frame) {
+
+	//frame_count++;
 
   base::AutoLock auto_lock(lock_);
 
@@ -1303,19 +1305,7 @@ void WebMediaPlayerImpl::FrameReady(
 
   current_frame_ = frame;
 
-  if(loading){
-  	loading=false;
-  	clock_gettime(CLOCK_MONOTONIC_RAW, &frame2);
-  	int64_t time=timespecDiff(&frame2, &frame1);
-  	cout<<"Loading: "<<convertToMilli(time)<<"ms\n";
-  }
-
-  else{
-	frame1=frame2;
-	clock_gettime(CLOCK_MONOTONIC_RAW, &frame2);
-	int64_t time=timespecDiff(&frame2, &frame1);
-	cout<<"Frame Delay: "<<convertToMilli(time)<<"ms\n";
-  }
+  Util::log("FrameReady");
 
   if (pending_repaint_)
     return;

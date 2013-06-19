@@ -9,6 +9,10 @@
 #include "third_party/WebKit/Source/Platform/chromium/public/WebURL.h"
 #include "webkit/media/webmediaplayer_delegate.h"
 
+#include <iostream>
+
+using namespace std;
+
 namespace prerender {
 
 PrerenderWebMediaPlayer::PrerenderWebMediaPlayer(
@@ -22,6 +26,7 @@ PrerenderWebMediaPlayer::PrerenderWebMediaPlayer(
       is_prerendering_(true),
       url_loaded_(false),
       cors_mode_(CORSModeUnspecified) {
+	cout<<"PrerenderWebMediaPlayerImpl\n";
 }
 
 PrerenderWebMediaPlayer::~PrerenderWebMediaPlayer() {}
