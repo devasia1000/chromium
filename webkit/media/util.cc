@@ -15,7 +15,7 @@ bool loading=false;
 
 //These variables are user editable
 double numFramesRandomSeek=100;
-bool randomSeek=true;
+bool seek=false;
 
 void Util::init(){
 	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
@@ -33,7 +33,7 @@ double Util::returnFramesToRandomSeek(){
 }
 
 bool Util::randomSeek(){
-	return randomSeek;
+	return seek;
 }
 
 //This is a private function of the class
