@@ -8,11 +8,6 @@
 #include <limits>
 #include <string>
 #include <vector>
-#include <iostream>
-#include <sys/time.h>
-#include <fstream>
-#include <stdio.h>
-#include <stdint.h>
 
 #include "base/bind.h"
 #include "base/callback.h"
@@ -65,15 +60,7 @@ using WebKit::WebSize;
 using WebKit::WebString;
 using media::PipelineStatus;
 
-using namespace std;
-
 namespace {
-
-//ofstream out("/home/devasia/Desktop/chromium.txt");
-//struct timespec frame1, frame2;
-//bool loading=true;
-//double frame_count=0;
-//int stall_delay=60;
 
 // Amount of extra memory used by each player instance reported to V8.
 // It is not exact number -- first, it differs on different platforms,
@@ -161,11 +148,6 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       pending_repaint_(false),
       pending_size_change_(false),
       video_frame_provider_client_(NULL) {
-
-	Util::init();
-
-	//srand(clock());
-
 
   media_log_->AddEvent(
       media_log_->CreateEvent(media::MediaLogEvent::WEBMEDIAPLAYER_CREATED));
@@ -283,7 +265,6 @@ void WebMediaPlayerImpl::load(const WebKit::WebURL& url,
 
   // Media source pipelines can start immediately.
   supports_save_ = false;
-  //cout<<"In load\n";
   StartPipeline(media_source);
 }
 
@@ -309,8 +290,6 @@ void WebMediaPlayerImpl::cancelLoad() {
 
 void WebMediaPlayerImpl::play() {
   
-  //log("Play");
-  
   DCHECK(main_loop_->BelongsToCurrentThread());
 
   paused_ = false;
@@ -323,8 +302,6 @@ void WebMediaPlayerImpl::play() {
 }
 
 void WebMediaPlayerImpl::pause() {
-  
-  //log("Pause");
   
   DCHECK(main_loop_->BelongsToCurrentThread());
 
@@ -549,7 +526,6 @@ void WebMediaPlayerImpl::setSize(const WebSize& size) {
 void WebMediaPlayerImpl::paint(WebCanvas* canvas,
                                const WebRect& rect,
                                uint8_t alpha) {
-  //cout<<"Paint\n";
   DCHECK(main_loop_->BelongsToCurrentThread());
 
   if (!accelerated_compositing_reported_) {
@@ -858,7 +834,6 @@ void WebMediaPlayerImpl::WillDestroyCurrentMessageLoop() {
 }
 
 void WebMediaPlayerImpl::Repaint() {
-  //cout<<"Repaint\n";
   DCHECK(main_loop_->BelongsToCurrentThread());
 
   bool size_changed = false;
@@ -1082,7 +1057,6 @@ void WebMediaPlayerImpl::DataSourceInitialized(const GURL& gurl, bool success) {
     return;
   }
 
-  //cout<<"In DataSourceInitialized\n";
   StartPipeline(NULL);
 }
 
@@ -1098,7 +1072,6 @@ void WebMediaPlayerImpl::NotifyDownloading(bool is_downloading) {
 }
 
 void WebMediaPlayerImpl::StartPipeline(WebKit::WebMediaSource* media_source) {
-	//cout<<"In StartPipeline\n";
   const CommandLine* cmd_line = CommandLine::ForCurrentProcess();
 
 
@@ -1293,8 +1266,6 @@ void WebMediaPlayerImpl::OnDurationChange() {
 void WebMediaPlayerImpl::FrameReady(
     const scoped_refptr<media::VideoFrame>& frame) {
 
-	//frame_count++;
-
   base::AutoLock auto_lock(lock_);
 
   if (current_frame_ &&
@@ -1313,45 +1284,6 @@ void WebMediaPlayerImpl::FrameReady(
   pending_repaint_ = true;
   main_loop_->PostTask(FROM_HERE, base::Bind(
       &WebMediaPlayerImpl::Repaint, AsWeakPtr()));
-
-  //Seek to a random location or pause every 100 frames
-  	/*frame_count++;
-      if((frame_count%100)==0){
-      	int choice=rand()%2;
-      	if(choice==0){
-      		log("Starting Random Seek");
-      		int max_seek=(int) maxTimeSeekable();
-      		seek(rand()%max_seek);
-      	}
-      	else{
-      		//pause();
-      	}
-      }*/
-}
-
-//***************************************************************** EXTRA UTILITY FUNCTIONS *************************************************
-
-void WebMediaPlayerImpl::log(string message){
-	//cout<<"Log called";
-	timeval t1;
-	gettimeofday(&t1, NULL);
-	//ofstream out;
-	//out.open("/home/devasia/Desktop/chromium_log.txt", ofstream::app);
-	cout<<message<<" at "<<t1.tv_sec<<"."<<t1.tv_usec<<"\n";
-	//out.flush();
-	//out.close();
-}
-
-int64_t WebMediaPlayerImpl::timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p){
-  return ((timeA_p->tv_sec * 1000000000) + timeA_p->tv_nsec) -
-           ((timeB_p->tv_sec * 1000000000) + timeB_p->tv_nsec);
-}
-
-int WebMediaPlayerImpl::convertToMilli(uint64_t nano){
-	double d = static_cast<double>(nano);
-	d=d/1000000;
-	int ret=(int) d;
-	return ret;
 }
 
 }  // namespace webkit_media
