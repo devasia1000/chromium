@@ -1,0 +1,1 @@
+cmd_/home/devasia/Desktop/ipfw3-2012/kipfw-mod/ipfw_mod.ko := ld -r -m elf_x86_64 -T /usr/src/linux-headers-3.2.0-48-generic/scripts/module-common.lds --build-id  -o /home/devasia/Desktop/ipfw3-2012/kipfw-mod/ipfw_mod.ko /home/devasia/Desktop/ipfw3-2012/kipfw-mod/ipfw_mod.o /home/devasia/Desktop/ipfw3-2012/kipfw-mod/ipfw_mod.mod.o
