@@ -7,9 +7,9 @@ iterations=10
 videoPlayTime=180 #in seconds
 
 #These variables are NOT user-editable
-i=0;
+i=0
 
-until [  $i -lt $iterations ]; do
+while [ $i -lt $iterations ]; do
 
 	#Load 'dummynet' kernel module
 	sudo insmod ./ipfw3-2012/kipfw-mod/ipfw_mod.ko
@@ -43,6 +43,6 @@ until [  $i -lt $iterations ]; do
 	echo "y" | sudo ./ipfw3-2012/ipfw/ipfw flush
 
 	#Increment counter 
-	let i+=1;
+	let i=i+1
 
 done
