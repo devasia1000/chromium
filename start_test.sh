@@ -1,25 +1,14 @@
 #!/bin/sh
 
 #These variables are user-editable
-bandwidth=2500 #in kilobits per second
-delay=50 #in milli-seconds
-iterations=10
-videoPlayTime=180 #in seconds
+bandwidth=350 #in kilobits per second
+iterations=100
+videoPlayTime=300 #in seconds
 
 #These variables are NOT user-editable
 i=0
 
 while [ $i -lt $iterations ]; do
-
-	#Load 'dummynet' kernel module
-	sudo insmod ./ipfw3-2012/kipfw-mod/ipfw_mod.ko
-
-	#Undo bandwidth throttling from last run
-	echo "y" | sudo ./ipfw3-2012/ipfw/ipfw flush
-
-	#Start bandwidth throttling
-	sudo ./ipfw3-2012/ipfw/ipfw add pipe 2 in proto tcp
-	sudo ./ipfw3-2012/ipfw/ipfw pipe 2 config bw ${bandwidth}Kbit/s delay ${delay}ms
 
 	#Delete all Chromium cache files
 	sudo rm -rfv ~/.cache/chromium/Default/Media\ Cache/*
@@ -28,19 +17,21 @@ while [ $i -lt $iterations ]; do
 	#Delete all Google Chrome cache files - just to be safe
 	sudo rm -rfv ~/.cache/google-chrome/Default/Media\ Cache/*
 	sudo rm -rfv ~/.cache/google-chrome/Default/Cache/*
+	
+	#Start bandwidth throttling and start Chromium
+	trickle -d $bandwidth -u 10000 ./out/Release/chrome http://127.0.0.1/start.html | tee chromium.txt
 
-	#Start chromium video
-	./out/Release/chrome http://skype-alpha.csail.mit.edu/start.html | tee ~/Desktop/src/chromium.txt &
 	#Wait for video to play a while
 	sleep $videoPlayTime
 	#Kill chromium
 	sudo killall chrome
 
+	#Kill bandwidth throttling process
+	sudo killall trickle
+	sudo killall trickled
+
 	#Start ChromiumPostProcessor
 	java -jar ChromiumPostProcessor/dist/ChromiumPostProcessor.jar $bandwidth $delay
-
-	#Undo bandwidth throttling
-	echo "y" | sudo ./ipfw3-2012/ipfw/ipfw flush
 
 	#Increment counter 
 	let i=i+1
