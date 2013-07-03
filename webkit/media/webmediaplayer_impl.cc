@@ -1294,7 +1294,7 @@ void WebMediaPlayerImpl::FrameReady(
 
     WebKit::WebTimeRanges buff=buffered_;
     WebKit::WebTimeRange *range=buff.data();
-    Util::log("ForwardBuffer", (*range).end-WebMediaPlayerImpl::currentTime());
+    Util::log("ForwardBuffer", (*range).end);
 }
 
 }  // namespace webkit_media
