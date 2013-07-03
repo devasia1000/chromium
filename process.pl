@@ -39,7 +39,6 @@ elsif($sp[0] eq "#PlayTime"){
 elsif($sp[0] eq "#ForwardBuffer"){
  print FORWARDBUFFERED $sp[3], " ", $sp[1], "\n";
  FORWARDBUFFERED->autoflush(1);
- print "BitRate: ", $sp[3];
 }
 
 elsif($sp[0] eq "#Stall" || $sp[0] eq "#Loading"){
