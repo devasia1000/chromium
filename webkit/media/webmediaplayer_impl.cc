@@ -1290,13 +1290,11 @@ void WebMediaPlayerImpl::FrameReady(
     WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
     Util::log("VideoResolution ", size.height*size.width);
 
+    Util::log("PlayTime", WebMediaPlayerImpl::currentTime());
+
     WebKit::WebTimeRanges buff=buffered_;
     WebKit::WebTimeRange *range=buff.data();
-    //for(unsigned int i=0; i < buff.size(); i++ ){
-    	//Util::log("StartRange", (*range).start);
-    	Util::log("EndRange", (*range).end);
-    	//range++;
-    //}
+    Util::log("ForwardBuffer", (*range).end-WebMediaPlayerImpl::currentTime());
 }
 
 }  // namespace webkit_media
