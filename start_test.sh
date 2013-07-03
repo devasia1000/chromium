@@ -17,7 +17,7 @@ i=0
 	sudo rm -rfv ~/.cache/google-chrome/Default/Cache/*
 
 	#Start Chromium
-	trickle -d 300 -u 1000 ~/Desktop/src/out/Release/chrome http://dash-mse-test.appspot.com/dash-player.html 
+	trickle -d 300 -u 1000 ~/Desktop/src/out/Release/chrome 
 
 	#Wait for video to play a while
         sleep $videoPlayTime

@@ -1286,6 +1286,17 @@ void WebMediaPlayerImpl::FrameReady(
   frame_count++;
 
     Util::log("FrameReady");
+
+    WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
+    Util::log("VideoResolution ", size.height*size.width);
+
+    WebKit::WebTimeRanges buff=buffered_;
+    WebKit::WebTimeRange *range=buff.data();
+    //for(unsigned int i=0; i < buff.size(); i++ ){
+    	//Util::log("StartRange", (*range).start);
+    	Util::log("EndRange", (*range).end);
+    	//range++;
+    //}
 }
 
 }  // namespace webkit_media
