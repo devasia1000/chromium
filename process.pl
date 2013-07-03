@@ -24,19 +24,19 @@ print $decodedFilename, " ", $totalbufferedFilename, " ", $forwardbufferedFilena
 while($line=<STDIN>){
  @sp=split(" ", $line);
  
-if($sp[0] eq "#Decoded"){
+if($sp[0] eq "#VideoResolution"){
   #print $sp[3], " ", $sp[1], "\n";
   print DECODED $sp[3], " ", $sp[1], "\n";
   DECODED->autoflush(1);
  }
 
-elsif($sp[0] eq "#TotalBuffered"){
+elsif($sp[0] eq "#PlayTime"){
   #print $sp[3], " ", $sp[1], "\n";
   print BUFFERED $sp[3], " ", $sp[1], "\n";
   BUFFERED->autoflush(1);
  }
 
-elsif($sp[0] eq "#SetBitRate"){
+elsif($sp[0] eq "#ForwardBuffer"){
  print FORWARDBUFFERED $sp[3], " ", $sp[1], "\n";
  FORWARDBUFFERED->autoflush(1);
  print "BitRate: ", $sp[3];
