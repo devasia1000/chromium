@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+
+$params= $ENV{'QUERY_STRING'};
+@tokens=split('&', $params);
+
+foreach $string (@tokens){ 
+
+ @mess=split('=', $string);
+
+ if(index($params, "audio")!=-1){
+  if($mess[0] eq "range"){
+   print "Content-type: audio/mp4\n\n";
+   $range=$mess[1];
+   $command="curl --header \"Range: bytes=${range}\" http://127.0.0.1/audio.mp4";
+   print `$command`;
+  }
+ }
+
+ elsif(index($params, "video")!=-1){
+  if($mess[0] eq "range"){
+   print "Content-type: video/webm\n\n";
+   $range=$mess[1];
+   $command="curl --header \"Range: bytes=${range}\" http://127.0.0.1/video_360.webm";
+   print `$command`;
+  }
+ }
+}
