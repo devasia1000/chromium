@@ -17,7 +17,7 @@ i=0
 	sudo rm -rfv ~/.cache/google-chrome/Default/Cache/*
 
 	#Start Chromium
-	trickle -d 300 -u 1000 ~/Desktop/src/out/Release/chrome | perl ~/Desktop/src/process.pl 
+	~/Desktop/src/out/Release/chrome 
 
 	#Wait for video to play a while
         sleep $videoPlayTime
