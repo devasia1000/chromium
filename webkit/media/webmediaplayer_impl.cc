@@ -1287,14 +1287,14 @@ void WebMediaPlayerImpl::FrameReady(
 
     Util::log("FrameReady");
 
-    WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
-    Util::log("VideoResolution ", size.height*size.width);
+    //WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
+    //Util::log("VideoResolution ", size.height*size.width);
 
-    Util::log("PlayTime", WebMediaPlayerImpl::currentTime());
+    //Util::log("PlayTime", WebMediaPlayerImpl::currentTime());
 
-    WebKit::WebTimeRanges buff=buffered_;
-    WebKit::WebTimeRange *range=buff.data();
-    Util::log("ForwardBuffer", (*range).end);
+    //WebKit::WebTimeRanges buff=buffered_;
+    //WebKit::WebTimeRange *range=buff.data();
+    //Util::log("ForwardBuffer", (*range).end);
 }
 
 }  // namespace webkit_media
