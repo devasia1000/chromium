@@ -7,8 +7,8 @@ sub generateLog4Filename;
 
 $log1Filename=generateLog1Filename();
 $log2Filename=generateLog2Filename();
-$log3Filename=generateLog3FileName();
-$log4Filename=generateLog4FileName();
+$log3Filename=generateLog3Filename();
+$log4Filename=generateLog4Filename();
 
 open(LOG1, ">${log1Filename}");
 $|=1;
@@ -25,13 +25,13 @@ while($line=<STDIN>){
  @sp=split(" ", $line);
  
 if($sp[0] eq "#VideoResolution"){
-  #print $sp[3], " ", $sp[1], "\n";
+  print $sp[3], " ", $sp[1], "\n";
   print LOG1 $sp[3], " ", $sp[1], "\n";
   LOG1->autoflush(1);
  }
 
 elsif($sp[0] eq "#Frame"){
-  #print $sp[3], " ", $sp[1], "\n";
+  print $sp[3], " ", $sp[1], "\n";
   print LOG2 $sp[3], " ", $sp[1], "\n";
   LOG2->autoflush(1);
  }
