@@ -1,49 +1,49 @@
 #!/usr/bin/perl -w
 
-sub generateDecodedFileName;
-sub generateTotalBufferedFileName;
-sub generateForwardBufferFileName;
-sub generateStallFileName;
+sub generateLog1Filename;
+sub generateLog2Filename;
+sub generateLog3Filename;
+sub generateLog4Filename;
 
-$decodedFilename=generateDecodedFileName();
-$totalbufferedFilename=generateTotalBufferedFileName();
-$forwardbufferedFilename=generateForwardBufferedFileName();
-$stallFilename=generateStallFileName();
+$log1Filename=generateLog1Filename();
+$log2Filename=generateLog2Filename();
+$log3Filename=generateLog3FileName();
+$log4Filename=generateLog4FileName();
 
-open(DECODED, ">${decodedFilename}");
+open(LOG1, ">${log1Filename}");
 $|=1;
-open(BUFFERED, ">${totalbufferedFilename}");
+open(LOG2, ">${log2Filename}");
 $|=1;
-open (STALLED, ">${stallFilename}");
+open (LOG3, ">${log3Filename}");
 $|=1;
-open(FORWARDBUFFERED, ">${forwardbufferedFilename}");
+open(LOG4, ">${log4Filename}");
 $|=1;
 
-print $decodedFilename, " ", $totalbufferedFilename, " ", $forwardbufferedFilename, "\n";
+print $log1Filename, " ", $log2Filename, " ", $log3Filename, "\n";
 
 while($line=<STDIN>){
  @sp=split(" ", $line);
  
 if($sp[0] eq "#VideoResolution"){
   #print $sp[3], " ", $sp[1], "\n";
-  print DECODED $sp[3], " ", $sp[1], "\n";
-  DECODED->autoflush(1);
+  print LOG1 $sp[3], " ", $sp[1], "\n";
+  LOG1->autoflush(1);
  }
 
-elsif($sp[0] eq "#PlayTime"){
+elsif($sp[0] eq "#Frame"){
   #print $sp[3], " ", $sp[1], "\n";
-  print BUFFERED $sp[3], " ", $sp[1], "\n";
-  BUFFERED->autoflush(1);
+  print LOG2 $sp[3], " ", $sp[1], "\n";
+  LOG2->autoflush(1);
  }
 
 elsif($sp[0] eq "#ForwardBuffer"){
- print FORWARDBUFFERED $sp[3], " ", $sp[1], "\n";
- FORWARDBUFFERED->autoflush(1);
+ print LOG3 $sp[3], " ", $sp[1], "\n";
+ LOG3->autoflush(1);
 }
 
 elsif($sp[0] eq "#Stall" || $sp[0] eq "#Loading"){
-  print STALLED $line;
-  STALLED->autoflush(1);
+  print LOG4 $line;
+  LOG4->autoflush(1);
  }
 
 else{
@@ -52,17 +52,17 @@ else{
 }
 
 
-sub generateDecodedFileName(){
+sub generateLog1Filename(){
  $i=0;
- $filename="/home/devasia/Desktop/log/decoded${i}.txt";
+ $filename="/home/devasia/Desktop/log/videoResolution${i}.txt";
  while(-e $filename){
   $i=$i+1;
-  $filename="/home/devasia/Desktop/log/decoded${i}.txt";
+  $filename="/home/devasia/Desktop/log/videoResolution${i}.txt";
  }
  return $filename;
 }
 
-sub generateTotalBufferedFileName(){
+sub generateLog2Filename(){
  $i=0;
  $filename="/home/devasia/Desktop/log/totalbuffered${i}.txt"; 
  while(-e $filename){
@@ -72,7 +72,7 @@ sub generateTotalBufferedFileName(){
  return $filename;
 }
 
-sub generateForwardBufferedFileName(){
+sub generateLog3Filename(){
  $i=0;
  $filename="/home/devasia/Desktop/log/forwardbuffered${i}.txt";
  while(-e $filename){
@@ -82,7 +82,7 @@ sub generateForwardBufferedFileName(){
  return $filename;
 }
 
-sub generateStallFileName(){
+sub generateLog4Filename(){
  $i=0;
  $filename="/home/devasia/Desktop/log/chromium_report${i}.txt";
  while(-e $filename){
