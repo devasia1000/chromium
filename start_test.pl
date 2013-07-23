@@ -11,4 +11,4 @@ print `sudo rm -rfv ~/.cache/google-chrome/Default/Media\ Cache/*`;
 print `sudo rm -rfv ~/.cache/google-chrome/Default/Cache/*`;
 
 #Start Chromium
-print `~/Desktop/src/out/Release/chrome ${videolink}`;
+print `~/Desktop/src/out/Release/chrome ${videolink} | perl process.pl`;
