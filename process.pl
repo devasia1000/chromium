@@ -64,10 +64,10 @@ sub generateLog1Filename(){
 
 sub generateLog2Filename(){
  $i=0;
- $filename="/home/devasia/Desktop/log/totalbuffered${i}.txt"; 
+ $filename="/home/devasia/Desktop/log/frame${i}.txt"; 
  while(-e $filename){
   $i=$i+1;
-  $filename="/home/devasia/Desktop/log/totalbuffered${i}.txt";
+  $filename="/home/devasia/Desktop/log/frame${i}.txt";
  }
  return $filename;
 }
