@@ -38,7 +38,7 @@ if($sp[0] eq "#VideoResolution"){
   LOG1->autoflush(1);
 
  if($plotFrequency1<0){
-   syswrite(PLOT1, "plot \"${log1Filename}\" using 1:2 with line\n");
+   syswrite(PLOT1, "plot \"${log1Filename}\" using 1:2 with line title \"${log1Filename}\"; set xlabel \"Time (ms)\"; set ylabel \"Video Resolution\"\n");
    $plotFrequency1=50
  }
 $plotFrequency1=$plotFrequency1-1;
@@ -50,7 +50,7 @@ elsif($sp[0] eq "#Frame"){
   LOG2->autoflush(1);
 
   if($plotFrequency2<0){
-   syswrite(PLOT2, "plot \"${log2Filename}\" using 1:2 with line\n");
+   syswrite(PLOT2, "plot \"${log2Filename}\" using 1:2 with line title \"${log2Filename}\"; set xlabel \"Time (ms)\"; set ylabel \"Frame Number\"\n");
    $plotFrequency2=50
   }
   $plotFrequency2=$plotFrequency2-1;
