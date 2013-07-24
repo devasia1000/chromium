@@ -150,9 +150,8 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       video_frame_provider_client_(NULL) {
 
 	frame_count=0;
-
-  //Seed clock for random number generator
-  srand(clock());
+	Util::init();
+	Util::log("Loading");
 
   media_log_->AddEvent(
       media_log_->CreateEvent(media::MediaLogEvent::WEBMEDIAPLAYER_CREATED));
@@ -1286,15 +1285,10 @@ void WebMediaPlayerImpl::FrameReady(
   frame_count++;
 
     Util::log("FrameReady");
+    Util::log("Frame", frame_count);
 
-    //WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
-    //Util::log("VideoResolution ", size.height*size.width);
-
-    //Util::log("PlayTime", WebMediaPlayerImpl::currentTime());
-
-    //WebKit::WebTimeRanges buff=buffered_;
-    //WebKit::WebTimeRange *range=buff.data();
-    //Util::log("ForwardBuffer", (*range).end);
+    WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
+    Util::log("VideoResolution ", size.height*size.width);
 }
 
 }  // namespace webkit_media

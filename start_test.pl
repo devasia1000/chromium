@@ -12,4 +12,4 @@ print $videolink;
 `sudo rm -rfv ~/.cache/google-chrome/Default/Cache/*`;
 
 #Start Chromium
-print `~/Desktop/src/out/Release/chrome ${videolink} | perl ~/Desktop/src/process.pl`;
+print `~/Desktop/src/out/Release/chrome ${videolink} | perl process.pl`;
