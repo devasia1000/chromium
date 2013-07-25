@@ -109,6 +109,14 @@ void Util::log(string message){
 	}
 }
 
+void Util::logWithoutTimestamp(string str){
+	cout<<str<<"\n";
+}
+
+void Util::logWithoutTimestamp(double d){
+	cout<<d<<"\n";
+}
+
 void Util::log(string message, int64_t value){
 	clock_gettime(CLOCK_MONOTONIC_RAW, &frame);
 	double time=timespecDiff(&frame, &start);

@@ -31,6 +31,8 @@ public:
 	static bool returnAlreadySeeked();
 	static void setAlreadySeeked(bool s);
 	static double returnSeekToLocation();
+	static void logWithoutTimestamp(string str);
+	static void logWithoutTimestamp(double d);
 };
 
 #endif /* UTIL_H_ */

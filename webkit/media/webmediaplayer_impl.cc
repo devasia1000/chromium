@@ -1279,7 +1279,7 @@ void WebMediaPlayerImpl::FrameReady(
 		clock_gettime(CLOCK_MONOTONIC_RAW, &nextFrameTimestamp);
 		double timeDiff = Util::timespecDiff(&nextFrameTimestamp,
 				&seekTimestamp);
-		Util::log("SeekTime", timeDiff);
+		Util::logWithoutTimestamp(timeDiff);
 		/* our test is done, kill the current tab */
 		std::exit(0);
 	}
