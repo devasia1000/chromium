@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
 $videolink=$ARGV[0];
-print $videolink;
 
 for($i=0;$i<100;$i++){
 #Delete all Chromium cache files

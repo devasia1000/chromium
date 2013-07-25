@@ -22,6 +22,8 @@ using namespace std;
 //Variables for random seek
 double numFramesRandomSeek;
 bool seek;
+bool alreadySeeked; /* we don't want chromium to seek twice */
+double seekToLocation; /* where should chromium seek to? (in seconds) */
 
 //Variables for stall detection
 string previousMessage;
@@ -39,8 +41,13 @@ int64_t decodedBytes;
 int64_t bufferPos;
 int64_t frame_count;
 
+// variables for loading time
+bool alreadyLoaded;
+
 void Util::init(){
+	alreadyLoaded=false;
 	numFramesRandomSeek=200;
+	seekToLocation=300;
 	seek=true;
 	frame_count=0;
 	previousMessage="";
@@ -53,13 +60,15 @@ void Util::init(){
 
 void Util::log(string message){
 
-	if(strcmp("Loading", message.c_str())==0){
+	if(strcmp("Loading", message.c_str())==0 && alreadyLoaded==false){
 
 		clock_gettime(CLOCK_MONOTONIC_RAW, &frame);
 		double time=timespecDiff(&frame, &start);
 
 		previousMessage="Loading";
 		previousMessageTime=time;
+
+		alreadyLoaded=true;
 	}
 
 	else if((strcmp("Loading", previousMessage.c_str())==0) && (strcmp("FrameReady", message.c_str())==0)){
@@ -121,4 +130,16 @@ double Util::timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p){
 	double d = static_cast<double>(nano);
 	d=d/1000000; //Convert to milliseconds
 	return d;
+}
+
+ bool Util::returnAlreadySeeked(){
+	 return alreadySeeked;
+ }
+
+void Util::setAlreadySeeked(bool s){
+	alreadySeeked=s;
+}
+
+double Util::returnSeekToLocation(){
+	return seekToLocation;
 }

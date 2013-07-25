@@ -1258,9 +1258,6 @@ void WebMediaPlayerImpl::OnDurationChange() {
   GetClient()->durationChanged();
 }
 
-/* we don't want chromium to seek to the same place twice */
-bool alreadySeeked=false;
-
 /* used to measure the time to between 'seek' and 'nextFrame' */
 struct timespec seekTimestamp;
 struct timespec nextFrameTimestamp;
@@ -1280,19 +1277,18 @@ void WebMediaPlayerImpl::FrameReady(
 
 	frame_count++;
 
-	if (alreadySeeked) {
+	if (Util::returnAlreadySeeked()) {
 		clock_gettime(CLOCK_MONOTONIC_RAW, &seekTimestamp);
 		double timeDiff = Util::timespecDiff(&seekTimestamp,
 				&nextFrameTimestamp);
 		Util::log("SeekTime", timeDiff);
-		/* our test is done, kill the current tab and let the perl script handle killing chromium */
+		/* our test is done, kill the current tab */
 		std::exit(0);
 	}
 
-  if(fmod(frame_count, Util::returnFramesToRandomSeek())==0 && Util::randomSeek()==true && alreadySeeked==false){
-	 alreadySeeked=true;
-	 Util::log("Seek");
-     double seekTime=300;
+  if(fmod(frame_count, Util::returnFramesToRandomSeek())==0 && Util::randomSeek()==true && Util::returnAlreadySeeked()==false){
+	 Util::setAlreadySeeked(true);
+     double seekTime=Util::returnSeekToLocation();
      clock_gettime(CLOCK_MONOTONIC_RAW, &seekTimestamp);
      seek(seekTime);
   }

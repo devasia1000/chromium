@@ -19,7 +19,7 @@
 
 using namespace std;
 
-class Util{
+class Util {
 
 public:
 	static void init();
@@ -28,6 +28,9 @@ public:
 	static double returnFramesToRandomSeek();
 	static bool randomSeek();
 	static double timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p);
+	static bool returnAlreadySeeked();
+	static void setAlreadySeeked(bool s);
+	static double returnSeekToLocation();
 };
 
 #endif /* UTIL_H_ */
