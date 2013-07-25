@@ -21,16 +21,13 @@ using namespace std;
 
 class Util{
 
-private:
-
-	static double timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p);
-
 public:
 	static void init();
 	static void log(string message);
 	static void log(string message, int64_t value);
 	static double returnFramesToRandomSeek();
 	static bool randomSeek();
+	static double timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p);
 };
 
 #endif /* UTIL_H_ */

@@ -3,6 +3,7 @@
 $videolink=$ARGV[0];
 print $videolink;
 
+for($i=0;$i<100;$i++){
 #Delete all Chromium cache files
 `sudo rm -rfv ~/.cache/chromium/Default/Media\ Cache/*`;
 `sudo rm -rfv ~/.cache/chromium/Default/Cache/*`;
@@ -12,4 +13,9 @@ print $videolink;
 `sudo rm -rfv ~/.cache/google-chrome/Default/Cache/*`;
 
 #Start Chromium
-print `~/Desktop/src/out/Release/chrome ${videolink} | perl ~/Desktop/src/process.pl`;
+system("~/Desktop/src/out/Release/chrome ${videolink} &");
+# wait for video to play a while
+sleep(25);
+#send SIGTERM to chromium
+print `sudo killall chrome`;
+}

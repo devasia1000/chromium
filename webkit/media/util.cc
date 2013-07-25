@@ -40,8 +40,8 @@ int64_t bufferPos;
 int64_t frame_count;
 
 void Util::init(){
-	numFramesRandomSeek=100;
-	seek=false;
+	numFramesRandomSeek=200;
+	seek=true;
 	frame_count=0;
 	previousMessage="";
 

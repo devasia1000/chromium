@@ -1258,6 +1258,14 @@ void WebMediaPlayerImpl::OnDurationChange() {
   GetClient()->durationChanged();
 }
 
+/* we don't want chromium to seek to the same place twice */
+bool alreadySeeked=false;
+
+/* used to measure the time to between 'seek' and 'nextFrame' */
+struct timespec seekTimestamp;
+struct timespec nextFrameTimestamp;
+
+
 void WebMediaPlayerImpl::FrameReady(
     const scoped_refptr<media::VideoFrame>& frame) {
   base::AutoLock auto_lock(lock_);
@@ -1266,12 +1274,26 @@ void WebMediaPlayerImpl::FrameReady(
       current_frame_->natural_size() != frame->natural_size() &&
       !pending_size_change_) {
     pending_size_change_ = true;
-  }
+	}
 
-  current_frame_ = frame;
+	current_frame_ = frame;
 
-  if(fmod(frame_count, Util::returnFramesToRandomSeek())==0 && Util::randomSeek()==true){
-     double seekTime=fmod(rand(), maxTimeSeekable());
+	frame_count++;
+
+	if (alreadySeeked) {
+		clock_gettime(CLOCK_MONOTONIC_RAW, &seekTimestamp);
+		double timeDiff = Util::timespecDiff(&seekTimestamp,
+				&nextFrameTimestamp);
+		Util::log("SeekTime", timeDiff);
+		/* our test is done, kill the current tab and let the perl script handle killing chromium */
+		std::exit(0);
+	}
+
+  if(fmod(frame_count, Util::returnFramesToRandomSeek())==0 && Util::randomSeek()==true && alreadySeeked==false){
+	 alreadySeeked=true;
+	 Util::log("Seek");
+     double seekTime=300;
+     clock_gettime(CLOCK_MONOTONIC_RAW, &seekTimestamp);
      seek(seekTime);
   }
 
@@ -1282,13 +1304,11 @@ void WebMediaPlayerImpl::FrameReady(
   main_loop_->PostTask(FROM_HERE, base::Bind(
       &WebMediaPlayerImpl::Repaint, AsWeakPtr()));
 
-  frame_count++;
+    //Util::log("FrameReady");
+    //Util::log("Frame", frame_count);
 
-    Util::log("FrameReady");
-    Util::log("Frame", frame_count);
-
-    WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
-    Util::log("VideoResolution ", size.height*size.width);
+    //WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
+    //Util::log("VideoResolution ", size.height*size.width);
 }
 
 }  // namespace webkit_media
