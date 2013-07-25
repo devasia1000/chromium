@@ -1,5 +1,8 @@
 #!/usr/bin/perl -w
 
+# set this variable to '0' if you don't want real time graphs
+$realTimeGraph=1;
+
 sub generateLog1Filename;
 sub generateLog2Filename;
 sub generateLog3Filename;
@@ -37,11 +40,13 @@ if($sp[0] eq "#VideoResolution"){
   print LOG1 $sp[3], " ", $sp[1], "\n";
   LOG1->autoflush(1);
 
+if($realTimeGraph==1){
  if($plotFrequency1<0){
    syswrite(PLOT1, "plot \"${log1Filename}\" using 1:2 with line title \"${log1Filename}\"; set xlabel \"Time (ms)\"; set ylabel \"Video Resolution\"\n");
    $plotFrequency1=50
  }
 $plotFrequency1=$plotFrequency1-1;
+}
 }
 
 elsif($sp[0] eq "#Frame"){
@@ -49,12 +54,14 @@ elsif($sp[0] eq "#Frame"){
   print LOG2 $sp[3], " ", $sp[1], "\n";
   LOG2->autoflush(1);
 
+if($realTimeGraph==1){
   if($plotFrequency2<0){
    syswrite(PLOT2, "plot \"${log2Filename}\" using 1:2 with line title \"${log2Filename}\"; set xlabel \"Time (ms)\"; set ylabel \"Frame Number\"\n");
    $plotFrequency2=50
   }
   $plotFrequency2=$plotFrequency2-1;
  }
+}
 
 elsif($sp[0] eq "#ForwardBuffer"){
  print LOG3 $sp[3], " ", $sp[1], "\n";
