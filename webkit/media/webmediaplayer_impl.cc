@@ -150,8 +150,6 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       video_frame_provider_client_(NULL) {
 
 	frame_count=0;
-	Util::init();
-	Util::log("Loading");
 
   media_log_->AddEvent(
       media_log_->CreateEvent(media::MediaLogEvent::WEBMEDIAPLAYER_CREATED));
@@ -1278,9 +1276,9 @@ void WebMediaPlayerImpl::FrameReady(
 	frame_count++;
 
 	if (Util::returnAlreadySeeked()) {
-		clock_gettime(CLOCK_MONOTONIC_RAW, &seekTimestamp);
-		double timeDiff = Util::timespecDiff(&seekTimestamp,
-				&nextFrameTimestamp);
+		clock_gettime(CLOCK_MONOTONIC_RAW, &nextFrameTimestamp);
+		double timeDiff = Util::timespecDiff(&nextFrameTimestamp,
+				&seekTimestamp);
 		Util::log("SeekTime", timeDiff);
 		/* our test is done, kill the current tab */
 		std::exit(0);

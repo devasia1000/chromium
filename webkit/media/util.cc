@@ -47,7 +47,7 @@ bool alreadyLoaded;
 void Util::init(){
 	alreadyLoaded=false;
 	numFramesRandomSeek=200;
-	seekToLocation=300;
+	seekToLocation=300; /* in seconds */
 	seek=true;
 	frame_count=0;
 	previousMessage="";
