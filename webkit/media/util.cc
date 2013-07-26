@@ -48,7 +48,7 @@ void Util::init(){
 	alreadyLoaded=false;
 	numFramesRandomSeek=200;
 	seekToLocation=300; /* in seconds */
-	seek=true;
+	seek=false;
 	frame_count=0;
 	previousMessage="";
 
