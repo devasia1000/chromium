@@ -88,8 +88,10 @@
         'webmediasourceclient_impl.h',
         'websourcebuffer_impl.cc',
         'websourcebuffer_impl.h',
-	'util.cc',
-	'util.h'
+		'util.cc',
+		'util.h',
+		'variables.cc',
+		'variables.h'
       ],
       'conditions': [
         ['OS == "android"', {

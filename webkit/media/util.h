@@ -22,17 +22,18 @@ using namespace std;
 class Util {
 
 public:
-	static void init();
-	static void log(string message);
-	static void log(string message, int64_t value);
-	static double returnFramesToRandomSeek();
-	static bool randomSeek();
-	static double timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p);
-	static bool returnAlreadySeeked();
-	static void setAlreadySeeked(bool s);
-	static double returnSeekToLocation();
-	static void logWithoutTimestamp(string str);
-	static void logWithoutTimestamp(double d);
+	static void init(); /* initialize the class, must be called before using the logger */
+	static void log(string message); /* log loading times and stall times */
+	static void log(string message, int64_t value); /* log a string and a value with a timestamp */
+	static double returnFramesToSeek(); /* return the number of frames before starting random seek */
+	static bool randomSeek(); /* getter function for seek data member */
+	static double timespecDiff(struct timespec *timeA_p, struct timespec *timeB_p); /* returnd the difference
+	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 between two timespecs */
+	static bool returnAlreadySeeked(); /* getter function for alreadySeeked */
+	static void setAlreadySeeked(bool s); /* setter function for alreadySeeked */
+	static double returnSeekToLocation(); /* getter function for numFramesToRandomSeek */
+	static void logWithoutTimestamp(string str); /* log a string without a timestamp */
+	static void logWithoutTimestamp(double d); /* log a double without a timestamp */
 };
 
 #endif /* UTIL_H_ */

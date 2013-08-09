@@ -1284,7 +1284,7 @@ void WebMediaPlayerImpl::FrameReady(
 		std::exit(0);
 	}
 
-  if(fmod(frame_count, Util::returnFramesToRandomSeek())==0 && Util::randomSeek()==true && Util::returnAlreadySeeked()==false){
+  if(fmod(frame_count, Util::returnFramesToSeek())==0 && Util::randomSeek()==true && Util::returnAlreadySeeked()==false){
 	 Util::setAlreadySeeked(true);
      double seekTime=Util::returnSeekToLocation();
      clock_gettime(CLOCK_MONOTONIC_RAW, &seekTimestamp);
@@ -1298,11 +1298,11 @@ void WebMediaPlayerImpl::FrameReady(
   main_loop_->PostTask(FROM_HERE, base::Bind(
       &WebMediaPlayerImpl::Repaint, AsWeakPtr()));
 
-    //Util::log("FrameReady");
-    //Util::log("Frame", frame_count);
+    Util::log("FrameReady");
+    Util::log("Frame", frame_count);
 
-    //WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
-    //Util::log("VideoResolution ", size.height*size.width);
+    WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
+    Util::log("VideoResolution ", size.height*size.width);
 }
 
 }  // namespace webkit_media

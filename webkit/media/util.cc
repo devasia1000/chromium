@@ -14,18 +14,14 @@
 #include <fstream>
 #include "util.h"
 #include "../../media/base/seekable_buffer.h"
+#include "variables.h"
 
 using namespace std;
 
-//TODO: Make these variables private
-
-//Variables for random seek
-double numFramesRandomSeek;
-bool seek;
+//Variables for auto seek
 bool alreadySeeked; /* we don't want chromium to seek twice */
-double seekToLocation; /* where should chromium seek to? (in seconds) */
 
-//Variables for stall detection
+//Variables for stall detection - don't modify or touch these variables
 string previousMessage;
 double previousMessageTime;
 
@@ -34,28 +30,30 @@ struct timespec start;
 struct timespec frame;
 
 //Variables for buffer detection
-double fps;
+double fps; /* frames per second of the video */
 
 //Variables for graph generation
-int64_t decodedBytes;
-int64_t bufferPos;
-int64_t frame_count;
+int64_t decodedBytes; /* number of video bytes decoded */
+int64_t bufferPos; /* position of the buffer */
+int64_t frame_count; /* number of frames played since the start of the video */
 
 // variables for loading time
-bool alreadyLoaded;
+bool alreadyLoaded; /* sometimes the loading function is called twice
+ 	 	 	 	 	 this ensures we only log the first call */
+
+bool alreadyInit=false; /* sometimes the Util::init()is called twice,
+ 	 	 	 	 	 	 this ensures we only log the first call */
 
 void Util::init(){
-	alreadyLoaded=false;
-	numFramesRandomSeek=200;
-	seekToLocation=300; /* in seconds */
-	seek=false;
-	frame_count=0;
-	previousMessage="";
-
-	decodedBytes=0;
-	bufferPos=0;
-
-	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+	if(alreadyInit==false){
+		alreadyInit=true;
+		alreadyLoaded=false;
+		frame_count=0;
+		previousMessage="";
+		decodedBytes=0;
+		bufferPos=0;
+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+	}
 }
 
 void Util::log(string message){
@@ -123,12 +121,12 @@ void Util::log(string message, int64_t value){
 	cout<<"#"<<message<<" "<<value<<" at "<<time<<"\n";
 }
 
-double Util::returnFramesToRandomSeek(){
-	return numFramesRandomSeek;
+double Util::returnFramesToSeek(){
+	return Variables::getNumberFramesSeek();
 }
 
 bool Util::randomSeek(){
-	return seek;
+	return Variables::getRandomSeek();
 }
 
 //This is a private function of the class
@@ -149,5 +147,5 @@ void Util::setAlreadySeeked(bool s){
 }
 
 double Util::returnSeekToLocation(){
-	return seekToLocation;
+	return Variables::getSeekToLocation();
 }
