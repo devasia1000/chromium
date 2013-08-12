@@ -81,40 +81,40 @@ else{
 
 sub generateLog1Filename(){
  $i=0;
- $filename="/home/devasia/Desktop/log/videoResolution${i}.txt";
+ $filename="~/log/videoResolution${i}.txt";
  while(-e $filename){
   $i=$i+1;
-  $filename="/home/devasia/Desktop/log/videoResolution${i}.txt";
+  $filename="~/log/videoResolution${i}.txt";
  }
  return $filename;
 }
 
 sub generateLog2Filename(){
  $i=0;
- $filename="/home/devasia/Desktop/log/frame${i}.txt"; 
+ $filename="~/log/frame${i}.txt"; 
  while(-e $filename){
   $i=$i+1;
-  $filename="/home/devasia/Desktop/log/frame${i}.txt";
+  $filename="~/log/frame${i}.txt";
  }
  return $filename;
 }
 
 sub generateLog3Filename(){
  $i=0;
- $filename="/home/devasia/Desktop/log/forwardbuffered${i}.txt";
+ $filename="~/log/forwardbuffered${i}.txt";
  while(-e $filename){
   $i=$i+1;
-  $filename="/home/devasia/Desktop/log/forwardbuffered${i}.txt";
+  $filename="~/log/forwardbuffered${i}.txt";
  }
  return $filename;
 }
 
 sub generateLog4Filename(){
  $i=0;
- $filename="/home/devasia/Desktop/log/chromium_report${i}.txt";
+ $filename="~/log/chromium_report${i}.txt";
  while(-e $filename){
   $i=$i+1;
-  $filename="/home/devasia/Desktop/log/chromium_report${i}.txt";
+  $filename="~/log/chromium_report${i}.txt";
  }
  return $filename;
 }
