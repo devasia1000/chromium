@@ -153,3 +153,8 @@ void Util::setAlreadySeeked(bool s){
 double Util::returnSeekToLocation(){
 	return Variables::getSeekToLocation();
 }
+
+void Util::logWithoutTimestamp(string str1, double d1, string str2, double d2){
+	cout<<str1<<":"<<d1<<","<<str2<<":"<<d2<<"\n";
+}
+

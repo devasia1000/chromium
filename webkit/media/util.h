@@ -35,6 +35,7 @@ public:
 	static void logWithoutTimestamp(string str); /* log a string without a timestamp */
 	static void logWithoutTimestamp(double d); /* log a double without a timestamp */
         static void logWithoutTimestamp(string str, double d);
+	static void logWithoutTimestamp(string str1, double d1, string str2, double d2);
 };
 
 #endif /* UTIL_H_ */
