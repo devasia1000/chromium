@@ -14,7 +14,7 @@ $videolink=$ARGV[0];
 `sudo rm -rfv ~/.cache/google-chrome/Default/Cache/*`;
 
 #Start Chromium
-print `~/Desktop/src/out/Release/chrome ${videolink} | perl ~/src/process.pl`;
+print `./out/Release/chrome ${videolink} | perl ~/src/process.pl`;
 # wait for video to play a while
 #sleep(40);
 #send SIGTERM to chromium
