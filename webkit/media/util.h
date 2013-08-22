@@ -34,6 +34,7 @@ public:
 	static double returnSeekToLocation(); /* getter function for numFramesToRandomSeek */
 	static void logWithoutTimestamp(string str); /* log a string without a timestamp */
 	static void logWithoutTimestamp(double d); /* log a double without a timestamp */
+        static void logWithoutTimestamp(string str, double d);
 };
 
 #endif /* UTIL_H_ */
