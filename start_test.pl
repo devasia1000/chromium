@@ -14,7 +14,7 @@ $videolink=$ARGV[0];
 `sudo rm -rfv ~/.cache/google-chrome/Default/Cache/*`;
 
 #Start Chromium
-print `./out/Release/chrome ${videolink} | python /home/chromium/pyssim/chromium_script/ssim_process.py`;
+print `./out/Release/chrome ${videolink}`;
 # wait for video to play a while
 #sleep(40);
 #send SIGTERM to chromium

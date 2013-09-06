@@ -98,13 +98,6 @@ void Util::log(string message){
 
 		frame_count++;
 	}
-
-	else{
-		clock_gettime(CLOCK_MONOTONIC_RAW, &frame);
-		double time=timespecDiff(&frame, &start);
-
-		cout<<"#"<<message<<" at "<<time<<"\n";
-	}
 }
 
 void Util::logWithoutTimestamp(string str){

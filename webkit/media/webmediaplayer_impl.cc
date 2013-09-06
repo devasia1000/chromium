@@ -1298,9 +1298,6 @@ void WebMediaPlayerImpl::FrameReady(
   main_loop_->PostTask(FROM_HERE, base::Bind(
       &WebMediaPlayerImpl::Repaint, AsWeakPtr()));
 
-    Util::log("FrameReady");
-    Util::log("Frame", frame_count);
-
     WebKit::WebSize size=WebMediaPlayerImpl::naturalSize();
     Util::log("VideoResolution ", size.height*size.width);
 }

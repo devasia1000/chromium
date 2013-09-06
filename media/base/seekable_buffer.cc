@@ -8,7 +8,6 @@
 
 #include "base/logging.h"
 #include "media/base/data_buffer.h"
-#include "../../webkit/media/util.h"
 
 namespace media {
 
@@ -36,7 +35,6 @@ void SeekableBuffer::Clear() {
 }
 
 int SeekableBuffer::Read(uint8* data, int size) {
-//Util::log("ForwardBuffer", forward_bytes_);
   DCHECK(data);
   return InternalRead(data, size, true, 0);
 }
